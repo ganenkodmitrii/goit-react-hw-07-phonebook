@@ -25,7 +25,7 @@ function ContactList({ contacts, onDeleteContact }) {
                         }}
                         type="button"
                         variant="contained"
-                        color="primary"
+                        color="secondary"
                         onClick={() => {
                             onDeleteContact(id);
                         }}

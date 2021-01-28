@@ -1,10 +1,14 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './App.css';
+import { changeFilter } from './redux/phonebook-action';
 import {
+    fetchContacts,
     addContact,
     deleteContact,
-    changeFilter,
-} from './redux/phonebook-action';
+} from './redux/phonebook-operations';
+import { getContacts, getFilter } from './redux/phonebook-selectors';
+import { memoize } from './components/memoize';
 import Container from './components/Container/Container';
 import Section from './components/Section/Section';
 import ContactForm from './components/ContactForm/ContactForm';
@@ -12,10 +16,12 @@ import ContactList from './components/ContactList/ContactList';
 import Filter from './components/Filter/Filter';
 
 function App() {
-    const contacts = useSelector(state => state.contacts.items);
-    const filter = useSelector(state => state.contacts.filter);
+    const contacts = useSelector(memoize(getContacts));
+    const filter = useSelector(memoize(getFilter));
 
     const dispatch = useDispatch();
+
+    useEffect(() => dispatch(fetchContacts()), [dispatch]);
 
     const handleSubmit = (name, number) => {
         const validationError = validateContact(name, number);
